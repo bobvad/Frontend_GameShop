@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="Registration.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="register-container">
+        <h1>Регистрация</h1>
+        <form id="registerForm">
+            <label for="email">Ваш email:</label>
+            <input type="email" id="email" placeholder="Введите вашу почту" required>
+
+            <label for="username">Логин:</label>
+            <input type="text" id="username" placeholder="Придумайте логин" required>
+
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" placeholder="Придумайте пароль" required>
+
+            <label for="confirm-password">Повторите пароль:</label>
+            <input type="password" id="confirm-password" placeholder="Повторите пароль" required>
+
+            <button type="submit">Создать аккаунт</button>
+        </form>
+
+        <div id="message" style="margin-top: 15px; text-align: center;"></div>
+
+        <a href="../AuthorizationRegistration/Authorization.html" class="back-to-home">Уже есть аккаунт? Войти</a>
+        <a href="../GlavnaiPage/index.html" class="back-to-home">Вернуться на главную</a>
+    </div>
+    <script src="../JavaScriptCode/RegInUser/RegIn.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="chatAi.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Игровой советник</h1>
+            <p>Получите персонализированные рекомендации игр от нашего ИИ-помощника</p>
+        </div>
+        
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-robot"></i>
+                    Чат с ИИ-помощником
+                </div>
+                <button class="chat-close" id="closeChat">&times;</button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    Привет! Я помогу подобрать игры по вашим предпочтениям. Какие жанры или игры вам нравятся?
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="userInput" placeholder="Введите сообщение...">
+                <button class="send-button" id="sendButton">
+                    <i class="fas fa-paper-plane"></i>
+                    Отправить
+                </button>
+            </div>
+        </div>
+        
+        <a href="../Catalog/Catalog.html" class="page-link">
+            <i class="fas fa-gamepad"></i>
+            Перейти к полному каталогу игр
+        </a>
+    </div>
+  <script src="../JavaScriptCode/ChatAI/chatAI.js"></script>
+</body>
+</html>

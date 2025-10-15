@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../SecretAdmin/admin.css">
+</head>
+<body>
+    <div class="admin-header">
+        <h1>Панель администратора</h1>
+        <p>Управление играми и контентом</p>
+    </div>
+
+    <nav class="admin-nav">
+        <button class="nav-btn active" onclick="showSection('addGame')">Добавить игру</button>
+        <button class="nav-btn" onclick="showSection('manageGames')">Управление играми</button>
+        <button class="nav-btn" onclick="logout()">Выйти</button>
+    </nav>
+
+    <div class="admin-container">
+        <div id="addGame" class="section active">
+            <h2>Добавить новую игру</h2>
+            <div id="addGameMessage"></div>
+            <form id="addGameForm">
+                <div class="form-group">
+                    <label for="gameTitle">Название игры:</label>
+                    <input type="text" id="gameTitle" class="form-control" placeholder="Введите название игры" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gameDescription">Описание игры:</label>
+                    <textarea id="gameDescription" class="form-control" placeholder="Описание игры" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="gamePrice">Цена (руб.):</label>
+                    <input type="number" id="gamePrice" class="form-control" placeholder="0.00" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gameReleaseDate">Дата выхода:</label>
+                    <input type="date" id="gameReleaseDate" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gameDeveloper">Разработчик:</label>
+                    <input type="text" id="gameDeveloper" class="form-control" placeholder="Разработчик игры" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gamePublisher">Издатель:</label>
+                    <input type="text" id="gamePublisher" class="form-control" placeholder="Издатель игры" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gameAgeRating">Возрастной рейтинг:</label>
+                    <input type="text" id="gameAgeRating" class="form-control" placeholder="Например: 18+" required>
+                </div>
+
+                <button type="submit" class="btn btn-success">Добавить игру</button>
+            </form>
+        </div>
+
+        <div id="manageGames" class="section">
+            <h2>Управление играми</h2>
+            <div id="gamesList" class="games-grid">
+            </div>
+        </div>
+    </div>
+       <script src="/JavaScriptCode/AdminAddDeleteUpdate/admin.js"></script>
+</body>
+</html>

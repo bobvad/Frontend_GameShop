@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="Authorization.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Вход в аккаунт</h1>
+        <form id="loginForm">
+            <label for="login">Логин:</label>
+            <input type="text" id="login" placeholder="Введите логин" required>
+
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" placeholder="Введите пароль" required>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="remember">
+                <label for="remember">Запомнить меня</label>
+            </div>
+
+            <button type="submit">Войти</button>
+        </form>
+
+        <div id="message" style="margin-top: 15px; text-align: center;"></div>
+        
+        <a href="../AuthorizationRegistration/Registration.html" class="back-to-home">Зарегистрироваться?</a>
+        <a href="../GlavnaiPage/index.html" class="back-to-home">Вернуться на главную</a>
+    </div>
+    <script src="../JavaScriptCode/RegInUser/AuthInUser/AuthInUser.js"></script>
+</body>
+</html>

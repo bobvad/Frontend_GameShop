@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="Lichni.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Games</span>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="../GlavnaiPage/index.html" class="nav-link">Главная</a></li>
+                        <li><a href="../Catalog/Catalog.html" class="nav-link">Каталог игр</a></li>
+                        <li><a href="../MyBug/MyBug.html" class="nav-link">Моя корзина</a></li>
+                     
+                        <li>
+                            <a href="../Cabinet/LichniiCabinet.html" class="nav-link active">Личный кабинет</a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <div class="header-actions">
+                    <div class="guest-only">
+                        <a href="../AuthorizationRegistration/Authorization.html" class="btn btn-login">Войти</a>
+                        <a href="../AuthorizationRegistration/Registration.html" class="btn btn-register">Регистрация</a>
+                    </div>
+                    
+                    <div class="auth-only" style="display: none;">
+                        <span id="userNameDisplay" style="color: white; margin-right: 15px;"></span>
+                        <a href="../Cabinet/LichniiCabinet.html" class="btn btn-profile">Личный кабинет</a>
+                        <button id="logoutButton" class="btn btn-logout">Выйти</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="account-section container">
+            <h2 class="section-title">Личный кабинет</h2>
+            
+            <div id="guestContent" class="auth-required">
+                <i class="fas fa-user-lock"></i>
+                <h2>Доступ ограничен</h2>
+                <p>Для входа в личный кабинет необходимо авторизоваться</p>
+                <div class="auth-buttons">
+                    <a href="../AuthorizationRegistration/Authorization.html" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </a>
+                    <a href="../AuthorizationRegistration/Registration.html" class="btn-register">
+                        <i class="fas fa-user-plus"></i> Регистрация
+                    </a>
+                </div>
+            </div>
+            
+            <div id="authContent" class="account-container" style="display: none;">
+                <div class="sidebar">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="user-name" id="userName">Загрузка...</h3>
+                        <p class="user-email" id="userEmail">Загрузка...</p>
+                        <p class="user-registration" id="userRegistration"></p>
+                    </div>
+                    
+                    <ul class="sidebar-menu">
+                        <li><a href="../MyBug/MyBug.html"><i class="fas fa-shopping-cart"></i> Корзина</a></li>
+                    </ul>
+                </div>
+                
+                <div class="account-content">
+                    <h3 class="content-title">Общая информация</h3>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="gamesBought">0</div>
+                            <div class="stat-label">Куплено игр</div>
+                        </div>
+                        <div class="stat-card secondary">
+                            <div class="stat-value" id="gamesInCart">0</div>
+                            <div class="stat-label">В корзине</div>
+                        </div>
+                    </div>
+                    <h3 class="content-title">Игры в корзине</h3>
+                    <div id="cartItems">
+                        <p style="color: var(--gray); text-align: center; padding: 20px;">
+                            Корзина пуста. <a href="../Catalog/Catalog.html" style="color: var(--primary);">Добавить игры</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>О нас</h3>
+                    <p> Game Store - ведущий онлайн-магазин игр с мгновенной доставкой и лучшими ценами на рынке.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Категории</h3>
+                    <ul class="footer-links">
+                        <li><a href="../Catalog/Catalog.html">Новинки</a></li>
+                        <li><a href="../Catalog/Catalog.html">Скоро выйдут</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>2025 Game Store.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="chat-button">
+        <a href="../ChatAIRecomendation/ChatwithAI.html" class="chat-link">
+            <i class="fas fa-comments"></i>
+            <span>Чат с AI</span>
+        </a>
+    </div>
+    <script src="../JavaScriptCode/PrivateCabinet/lichcab.js"></script>
+</body>
+</html>

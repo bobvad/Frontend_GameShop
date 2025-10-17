@@ -1,5 +1,5 @@
-const CART_API_URL = 'https://localhost:7083/api/Carts';
-const PURCHASE_API_URL = 'https://localhost:7083/api/PurchasesController';
+const CART_API_URL = 'http://192.168.0.9:5000/api/Carts';
+const PURCHASE_API_URL = 'http://192.168.0.9:5000/api/PurchasesController';
 
 function checkAuth() {
     const user = localStorage.getItem('user');
@@ -130,7 +130,7 @@ function displayCartItems(cartItems) {
         </div>
         
         <div style="text-align: center; margin-top: 20px;">
-            <a href="../Catalog/Catalog.html" class="continue-shopping">
+            <a href="/pages/Catalog.html" class="continue-shopping">
                 Продолжить покупки
             </a>
         </div>
@@ -214,7 +214,7 @@ async function checkout() {
         loadCartFromServer(user.id);
         
         setTimeout(() => {
-            window.location.href = '../Cabinet/LichniiCabinet.html';
+            window.location.href = '/pages/LichniiCabinet.html';
         }, 1500);
 
     } catch (error) {
@@ -235,7 +235,7 @@ function showEmptyCart() {
             <i class="fas fa-shopping-cart"></i>
             <h3>Корзина пуста</h3>
             <p>Добавьте игры из каталога, чтобы они появились здесь</p>
-            <a href="../Catalog/Catalog.html" class="continue-shopping">
+            <a href="/pages/Catalog.html" class="continue-shopping">
                 <i class="fas fa-arrow-left"></i>
                 Перейти в каталог
             </a>
@@ -329,7 +329,7 @@ async function clearCart() {
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
-    window.location.href = '../GlavnaiPage/index.html';
+    window.location.href = '/index.html';
 }
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог игр - Game Store</title>
+    <title>Мои покупки - Game Store</title>
     <link rel="stylesheet" href="/css/GlavnaiPage/GameErTelecomDisain.css">
-    <link rel="stylesheet" href="/css/Catalog/CatalogDisain.css">
+    <link rel="stylesheet" href="/css/MyPay/myPay.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -20,9 +20,9 @@
                 <nav>
                     <ul>
                         <li><a href="/index.html" class="nav-link">Главная</a></li>
-                        <li><a href="/pages/Catalog.html" class="nav-link active">Каталог игр</a></li>
+                        <li><a href="/pages/Catalog.html" class="nav-link">Каталог игр</a></li>
                         <li><a href="/pages/MyBug.html" class="nav-link">Моя корзина</a></li>
-                        <li><a href="/pages/MyPay/MyPurchases.html" class="nav-link">Мои покупки</a></li>
+                        <li><a href="/pages/MyPay/MyPurchases.html" class="nav-link active">Мои покупки</a></li>
                         <li><a href="/pages/LichniiCabinet.html" class="nav-link">Личный кабинет</a></li>
                     </ul>
                 </nav>
@@ -43,28 +43,38 @@
     </header>
 
     <main>
-        <section class="catalogue-section container">
-            <h2 class="section-title">Каталог игр</h2>
-            
-            <div class="filters-section">
-                <div class="search-container">
-                    <div class="search-box">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" placeholder="Поиск по названию, разработчику или жанру..." class="search-input">
+        <section class="purchases-section container">
+            <h2 class="section-title">Мои покупки</h2>
+            <div class="guest-only">
+                <div class="auth-required">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>Для просмотра покупок</h3>
+                    <p>Пожалуйста, авторизуйтесь или зарегистрируйтесь</p>
+                    <div class="auth-buttons">
+                        <a href="/pages/Authorization.html" class="btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </a>
+                        <a href="/pages/Registration.html" class="btn-register">
+                            <i class="fas fa-user-plus"></i> Регистрация
+                        </a>
                     </div>
-                    <button class="search-button" onclick="searchGames()">
-                        <i class="fas fa-search"></i>
-                        Найти игры
-                    </button>
                 </div>
             </div>
-
             
-            <div class="games-grid" id="gamesContainer">
-            </div>
-            
-            <div id="loadingIndicator" class="loading-indicator">
-                <span>Загрузка игр...</span>
+            <div class="auth-only" style="display: none;">
+                <div class="purchases-grid" id="purchasesContainer">
+                </div>
+                
+                <div id="loadingIndicator" class="loading-indicator">
+                    <span>Загрузка покупок...</span>
+                </div>
+                
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>У вас пока нет покупок</h3>
+                    <p>Откройте для себя удивительный мир игр и начните собирать свою коллекцию!</p>
+                    <a href="/pages/Catalog.html" class="simple-btn">Перейти в каталог</a>
+                </div>
             </div>
         </section>
     </main>
@@ -98,6 +108,7 @@
             <span>Чат с AI</span>
         </a>
     </div>
-    <script src="/js/Catalog/catalog.js"></script>
+
+    <script src="/js/MyPay/myPay.js"></script>
 </body>
 </html>

@@ -3,15 +3,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (userData) {
         const user = JSON.parse(userData);
         if (user.role === 'Admin') {
-            window.location.href = '../SecretAdmin/adminuprav.html';
+            window.location.href = '/pages/SecretAdmin/admin.html';
         } else {
-            window.location.href = '../Cabinet/LichniiCabinet.html';
+            window.location.href = '/pages/LichniiCabinet.html';
         }
         return;
     }
 
-    const API_URL = 'https://localhost:7083/api';
-
+    const API_URL = 'http://192.168.0.9:5000/api';
     document.getElementById('loginForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -47,9 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 setTimeout(() => {
                     if (user.role === 'Admin') {
-                        window.location.href = '../AdminPage/adminuprav.html';
+                        window.location.href = '/pages/SecretAdmin/admin.html';
                     } else {
-                        window.location.href = '../Cabinet/LichniiCabinet.html';
+                        window.location.href = '/pages/LichniiCabinet.html';
                     }
                 }, 1000);
                 

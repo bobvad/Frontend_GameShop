@@ -1,4 +1,4 @@
- const API_URL = 'https://localhost:7083/api';
+const API_URL = 'http://192.168.0.9:5000/api';
 
 function checkAuth() {
     const user = localStorage.getItem('user');
@@ -35,7 +35,7 @@ function logout() {
     localStorage.removeItem('cart');
     localStorage.removeItem('purchasedGames');
     checkAuth();
-    window.location.href = '../AuthorizationRegistration/Authorization.html';
+    window.location.href = '/pages/Authorization.html';
 }
 
 async function loadUserData() {
@@ -107,7 +107,7 @@ function displayRecentPurchases(purchases) {
     if (!purchases || purchases.length === 0) {
         container.innerHTML = `
             <p style="color: var(--gray); text-align: center; padding: 20px;">
-                У вас пока нет совершенных покупок. <a href="../Catalog/Catalog.html" style="color: var(--primary);">Перейти в каталог</a>
+                У вас пока нет совершенных покупок. <a href="/pages/Catalog.html" style="color: var(--primary);">Перейти в каталог</a>
             </p>
         `;
         return;
@@ -127,7 +127,7 @@ function displayRecentPurchases(purchases) {
         </div>
         ${purchases.length > 3 ? `
             <div style="text-align: center; margin-top: 15px;">
-                <a href="../MyPay/MyPay.html" style="color: var(--primary);">Показать все покупки (${purchases.length})</a>
+                <a href="/pages/MyPay/MyPurchases.html" style="color: var(--primary);">Показать все покупки (${purchases.length})</a>
             </div>
         ` : ''}
     `;
@@ -141,7 +141,7 @@ function displayCartItems(cartItems) {
     if (!cartItems || cartItems.length === 0) {
         container.innerHTML = `
             <p style="color: var(--gray); text-align: center; padding: 20px;">
-                Корзина пуста. <a href="../Catalog/Catalog.html" style="color: var(--primary);">Добавить игры</a>
+                Корзина пуста. <a href="/pages/Catalog.html" style="color: var(--primary);">Добавить игры</a>
             </p>
         `;
         return;
@@ -163,7 +163,7 @@ function displayCartItems(cartItems) {
             `).join('')}
         </div>
         <div style="text-align: center; margin-top: 20px;">
-            <a href="../MyBug/MyBug.html" class="btn-view-cart">Перейти в корзину (${cartItems.length})</a>
+            <a href="/pages/MyBug.html" class="btn-view-cart">Перейти в корзину (${cartItems.length})</a>
         </div>
     `;
 }
@@ -215,6 +215,7 @@ function showNotification(message, type = 'info') {
         }
     }, 3000);
 }
+
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {
@@ -229,11 +230,6 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
-document.getElementById('editProfile')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    alert('Функция редактирования профиля будет доступна в следующем обновлении!');
-});
 
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();

@@ -1,5 +1,6 @@
-const API_URL = 'https://localhost:7083/api/GameController';
-const CART_API_URL = 'https://localhost:7083/api/Carts'; 
+const API_URL = 'http://192.168.0.9:5000/api/GameController';
+const CART_API_URL = 'http://192.168.0.9:5000/api/Carts';
+
 let allGames = [];
 
 function checkAuth() {
@@ -28,7 +29,7 @@ function checkAuth() {
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
-    window.location.href = '../GlavnaiPage/index.html'; 
+    window.location.href = '/index.html'; 
 }
 
 async function loadGames() {
@@ -125,7 +126,7 @@ async function addToCart(gameId) {
     const user = localStorage.getItem('user');
     if (!user) {
         alert('Пожалуйста, войдите в систему чтобы добавить игру в корзину');
-        window.location.href = '../AuthorizationRegistration/Authorization.html';
+        window.location.href = '/pages/Authorization.html';
         return;
     }
 
@@ -164,20 +165,8 @@ async function addToCart(gameId) {
     }
 }
 
-async function updateCartCounter(userId) {
-    try {
-        const response = await fetch(`${CART_API_URL}/GetUserCart/${userId}`);
-        if (response.ok) {
-            const cartItems = await response.json();
-            updateCartBadge(cartItems.length);
-        }
-    } catch (error) {
-        console.error('Ошибка обновления счетчика корзины:', error);
-    }
-}
-
 function updateCartBadge(count) {
-    let cartLink = document.querySelector('a[href="../MyBug/MyBug.html"]');
+    let cartLink = document.querySelector('a[href="/pages/MyBug.html"]');
     if (!cartLink) return;
     
     let oldBadge = cartLink.querySelector('.cart-badge');
@@ -199,6 +188,19 @@ function updateCartBadge(count) {
             text-align: center;
         `;
         cartLink.appendChild(badge);
+    }
+}
+
+async function updateCartCounter(userId) {
+    try {
+        const response = await fetch(`${CART_API_URL}/GetUserCart/${userId}`);
+        if (response.ok) {
+            const cartItems = await response.json();
+            const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            updateCartBadge(totalItems);
+        }
+    } catch (error) {
+        console.error('Ошибка при обновлении счетчика корзины:', error);
     }
 }
 

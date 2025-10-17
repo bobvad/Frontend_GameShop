@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Store</title>
-    <link rel="stylesheet" href="GameErTelecomDisain.css">
+    <link rel="stylesheet" href="css/GlavnaiPage/GameErTelecomDisain.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -16,26 +16,24 @@
                 <span>Games</span>
             </div>
             
-            <nav>
-                <ul>
-                    <li><a href="index.html" class="nav-link active">Главная</a></li>
-                    <li><a href="../Catalog/Catalog.html" class="nav-link">Каталог игр</a></li>
-                    <li><a href="../MyBug/MyBug.html" class="nav-link">Моя корзина</a></li>
-                    <li>
-                        <a href="../Cabinet/LichniiCabinet.html" class="nav-link">Личный кабинет</a>
-                    </li>
-                </ul>
-            </nav>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link active">Главная</a></li>
+                <li><a href="pages/Catalog.html" class="nav-link">Каталог игр</a></li>
+                <li><a href="pages/MyBug.html" class="nav-link">Моя корзина</a></li>
+                <li><a href="pages/MyPay/MyPurchases.html" class="nav-link">Мои покупки</a></li>
+               <li><a href="pages/LichniiCabinet.html" class="nav-link">Личный кабинет</a></li>
+            </ul>
+        </nav>
             
             <div class="header-actions">
                 <div class="guest-only">
-                    <a href="../AuthorizationRegistration/Authorization.html" class="btn btn-login">Войти</a>
-                    <a href="../AuthorizationRegistration/Registration.html" class="btn btn-register">Регистрация</a>
+                    <a href="pages/Authorization.html" class="btn btn-login">Войти</a>
+                    <a href="pages/Registration.html" class="btn btn-register">Регистрация</a>
                 </div>
                 
                 <div class="auth-only" style="display: none;">
                     <span id="userNameDisplay" style="color: white; margin-right: 15px;"></span>
-                    <a href="../Cabinet/LichniiCabinet.html" class="btn btn-profile">Личный кабинет</a>
                     <button id="logoutButton" class="btn btn-logout">Выйти</button>
                 </div>
             </div>
@@ -59,37 +57,37 @@
                 <div class="simple-card">
                     <i class="fas fa-crosshairs"></i>
                     <h3>Экшен</h3>
-                    <a href="Catalog.html" class="simple-btn">Перейти</a>
+                    <a href="pages/Catalog.html" class="simple-btn">Перейти</a>
                 </div>
                 
                 <div class="simple-card">
                     <i class="fas fa-hat-wizard"></i>
                     <h3>RPG</h3>
-                    <a href="Catalog.html" class="simple-btn">Перейти</a>
+                    <a href="pages/Catalog.html" class="simple-btn">Перейти</a>
                 </div>
                 
                 <div class="simple-card">
                     <i class="fas fa-racing-flag"></i>
                     <h3>Гонки</h3>
-                    <a href="Catalog.html" class="simple-btn">Перейти</a>
+                    <a href="pages/Catalog.html" class="simple-btn">Перейти</a>
                 </div>
                 
                 <div class="simple-card">
                     <i class="fas fa-ghost"></i>
                     <h3>Хоррор</h3>
-                    <a href="Catalog.html" class="simple-btn">Перейти</a>
+                    <a href="pages/Catalog.html" class="simple-btn">Перейти</a>
                 </div>
                 
                 <div class="simple-card">
                     <i class="fas fa-puzzle-piece"></i>
                     <h3>Стратегии</h3>
-                    <a href="Catalog.html" class="simple-btn">Перейти</a>
+                    <a href="pages/Catalog.html" class="simple-btn">Перейти</a>
                 </div>
                 
                 <div class="simple-card">
                     <i class="fas fa-futbol"></i>
                     <h3>Спорт</h3>
-                    <a href="Catalog.html" class="simple-btn">Перейти</a>
+                    <a href="pages/Catalog.html" class="simple-btn">Перейти</a>
                 </div>
             </div>
         </div>
@@ -106,8 +104,8 @@
                 <div class="footer-section">
                     <h3>Категории</h3>
                     <ul class="footer-links">
-                        <li><a href="Catalog.html">Новинки</a></li>
-                        <li><a href="Catalog.html">Скоро выйдут</a></li>
+                        <li><a>Новинки</a></li>
+                        <li><a>Скоро выйдут</a></li>
                     </ul>
                 </div>
             </div>
@@ -119,11 +117,11 @@
     </footer>
     
     <div class="chat-button">
-        <a href="../ChatAIRecomendation/ChatwithAI.html" class="chat-link">
+        <a href="pages/ChatwithAI.html" class="chat-link">
             <i class="fas fa-comments"></i>
             <span>Чат с AI</span>
         </a>
     </div>
-    <script src="../JavaScriptCode/HomeGlavnai/home.js"></script>
+    <script src="js/home.js"></script>
 </body>
 </html>

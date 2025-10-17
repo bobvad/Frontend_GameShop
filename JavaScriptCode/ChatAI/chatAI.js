@@ -4,7 +4,7 @@
             const userInput = document.getElementById('userInput');
             const sendButton = document.getElementById('sendButton');
             
-            const AI_API_URL = 'https://localhost:7083/api/MessagesController/SendMessage';
+           const AI_API_URL = 'http://192.168.0.9:5000/api/MessagesController/SendMessage';
             
             function addMessage(text, isUser = false) {
                 const messageDiv = document.createElement('div');

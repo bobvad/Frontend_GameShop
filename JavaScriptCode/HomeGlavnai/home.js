@@ -25,7 +25,7 @@ function checkAuth() {
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
-    window.location.href = 'index.html';
+    window.location.href = '/index.html';
 }
 
 document.addEventListener('DOMContentLoaded', function() {

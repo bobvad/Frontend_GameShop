@@ -1,5 +1,6 @@
 const API_URL = 'https://localhost:7083/api/GameController';
 const CART_API_URL = 'https://localhost:7083/api/Carts';
+const GAME_GENRE_API_URL = 'https://localhost:7083/api/GameGenreController';
 
 let allGames = [];
 
@@ -24,12 +25,19 @@ function checkAuth() {
          authElements.forEach(el => el.style.display = 'none');
          guestElements.forEach(el => el.style.display = 'block');
         }
-      }
+}
 
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
     window.location.href = '../GlavnaiPage/index.html'; 
+}
+
+async function loadGamesData() {
+    const response = await fetch(`${GAME_GENRE_API_URL}/GetAllGamesWithGenres`);
+    if (!response.ok) throw new Error(`Ошибка: ${response.status}`);
+    allGames = await response.json();
+    console.log('Загруженные игры с жанрами:', allGames);
 }
 
 async function loadGames() {
@@ -40,11 +48,7 @@ async function loadGames() {
         loadingIndicator.style.display = 'block';
         gamesContainer.innerHTML = '';
         
-        const response = await fetch(`${API_URL}/GetAllGames`);
-        
-        if (!response.ok) throw new Error(`Ошибка: ${response.status}`);
-        
-        allGames = await response.json();
+        await loadGamesData();
         
         console.log('Загруженные игры:', allGames);
         if (allGames.length > 0) {
@@ -67,6 +71,14 @@ async function loadGames() {
     }
 }
 
+function getGameGenres(game) {
+    if (game.genres && Array.isArray(game.genres)) {
+        return game.genres;
+    }
+    
+    return ['Жанр не указан'];
+}
+
 function displayGames(games) {
     const container = document.getElementById('gamesContainer');
     
@@ -84,24 +96,38 @@ function displayGames(games) {
     container.innerHTML = games.map(game => {
         console.log('Game data:', game);
         
-        const title = game.title || game.name || 'Без названия';
+        const title = game.title || 'Без названия';
         const price = game.price ? game.price + ' руб.' : 'Цена не указана';
         const description = game.description ? 
             (game.description.length > 150 ? game.description.substring(0, 150) + '...' : game.description) 
             : 'Описание отсутствует';
         const developer = game.developer || 'Не указан';
         const publisher = game.publisher || 'Не указан';
-        const ageRating = game.ageRating || game.age_rating || 'Не указан';
+        const ageRating = game.ageRating || 'Не указан';
         const releaseDate = game.releaseDate ? 
             new Date(game.releaseDate).toLocaleDateString('ru-RU') : 
             'Не указана';
-        const gameId = game.gameId || game.id || game.game_id;
+        const gameId = game.id; 
+
+        const genres = getGameGenres(game);
+        const genresHtml = genres.map(genre => 
+            `<span class="genre-tag">${escapeHtml(genre)}</span>`
+        ).join('');
 
         return `
         <div class="game-card">
             <div class="game-content">
                 <h3 class="game-title">${escapeHtml(title)}</h3>
                 <div class="game-price">${price}</div>
+                
+                <!-- Блок с жанрами -->
+                <div class="game-genres">
+                    <strong><i class="fas fa-tags"></i> Жанры:</strong>
+                    <div class="genres-container">
+                        ${genresHtml}
+                    </div>
+                </div>
+                
                 <p class="game-description">${escapeHtml(description)}</p>
                 <div class="game-details">
                     <div><i class="fas fa-code"></i> Разработчик: ${escapeHtml(developer)}</div>
@@ -133,12 +159,17 @@ function searchGames() {
         return;
     }
     
-    const filteredGames = allGames.filter(game => 
-        (game.title && game.title.toLowerCase().includes(searchTerm)) ||
-        (game.developer && game.developer.toLowerCase().includes(searchTerm)) ||
-        (game.publisher && game.publisher.toLowerCase().includes(searchTerm)) ||
-        (game.description && game.description.toLowerCase().includes(searchTerm))
-    );
+    const filteredGames = allGames.filter(game => {
+        const gameGenresList = getGameGenres(game);
+        
+        return (
+            (game.title && game.title.toLowerCase().includes(searchTerm)) ||
+            (game.developer && game.developer.toLowerCase().includes(searchTerm)) ||
+            (game.publisher && game.publisher.toLowerCase().includes(searchTerm)) ||
+            (game.description && game.description.toLowerCase().includes(searchTerm)) ||
+            gameGenresList.some(genre => genre.toLowerCase().includes(searchTerm))
+        );
+    });
     
     displayGames(filteredGames);
 }
@@ -218,8 +249,7 @@ async function updateCartCounter(userId) {
 
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
-    loadGames();
-    
+    loadGames(); 
     const logoutBtn = document.getElementById('logoutButton');
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
 

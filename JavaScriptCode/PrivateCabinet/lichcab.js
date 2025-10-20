@@ -35,7 +35,7 @@ function logout() {
     localStorage.removeItem('cart');
     localStorage.removeItem('purchasedGames');
     checkAuth();
-    window.location.href = '/pages/Authorization.html';
+    window.location.href = '../AuthorizationRegistration/Authorization.html';
 }
 
 async function loadUserData() {

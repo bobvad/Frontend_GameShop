@@ -1,5 +1,5 @@
-const API_URL = 'http://192.168.0.9:5000/api/GameController';
-const CART_API_URL = 'http://192.168.0.9:5000/api/Carts';
+const API_URL = 'https://localhost:7083/api/GameController';
+const CART_API_URL = 'https://localhost:7083/api/Carts';
 
 let allGames = [];
 
@@ -29,7 +29,7 @@ function checkAuth() {
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
-    window.location.href = '/index.html'; 
+    window.location.href = '../GlavnaiPage/index.html'; 
 }
 
 async function loadGames() {
@@ -70,7 +70,7 @@ async function loadGames() {
 function displayGames(games) {
     const container = document.getElementById('gamesContainer');
     
-    if (games.length === 0) {
+    if (!games || games.length === 0) {
         container.innerHTML = `
             <div class="no-results">
                 <i class="fas fa-gamepad"></i>
@@ -81,27 +81,48 @@ function displayGames(games) {
         return;
     }
     
-    container.innerHTML = games.map(game => `
+    container.innerHTML = games.map(game => {
+        console.log('Game data:', game);
+        
+        const title = game.title || game.name || 'Без названия';
+        const price = game.price ? game.price + ' руб.' : 'Цена не указана';
+        const description = game.description ? 
+            (game.description.length > 150 ? game.description.substring(0, 150) + '...' : game.description) 
+            : 'Описание отсутствует';
+        const developer = game.developer || 'Не указан';
+        const publisher = game.publisher || 'Не указан';
+        const ageRating = game.ageRating || game.age_rating || 'Не указан';
+        const releaseDate = game.releaseDate ? 
+            new Date(game.releaseDate).toLocaleDateString('ru-RU') : 
+            'Не указана';
+        const gameId = game.gameId || game.id || game.game_id;
+
+        return `
         <div class="game-card">
-            <div class="game-image">
-                <i class="fas fa-gamepad"></i>
-            </div>
             <div class="game-content">
-                <h3 class="game-title">${game.title || 'Без названия'}</h3>
-                <div class="game-price">${game.price ? game.price + ' руб.' : 'Цена не указана'}</div>
-                <p class="game-description">${game.description ? game.description.substring(0, 500) + '...' : 'Описание отсутствует'}</p>
+                <h3 class="game-title">${escapeHtml(title)}</h3>
+                <div class="game-price">${price}</div>
+                <p class="game-description">${escapeHtml(description)}</p>
                 <div class="game-details">
-                    <div><i class="fas fa-code"></i> ${game.developer || 'Не указан'}</div>
-                    <div><i class="fas fa-building"></i> ${game.publisher || 'Не указан'}</div>
-                    <div><i class="fas fa-star"></i> ${game.age_rating || 'Не указан'}</div>
-                    <div><i class="fas fa-calendar"></i> ${game.release_date ? new Date(game.release_date).toLocaleDateString('ru-RU') : 'Не указана'}</div>
+                    <div><i class="fas fa-code"></i> Разработчик: ${escapeHtml(developer)}</div>
+                    <div><i class="fas fa-building"></i> Издатель: ${escapeHtml(publisher)}</div>
+                    <div><i class="fas fa-star"></i> Возрастной рейтинг: ${escapeHtml(ageRating)}</div>
+                    <div><i class="fas fa-calendar"></i> Дата выхода: ${releaseDate}</div>
                 </div>
-                <button class="buy-button" onclick="addToCart(${game.id || game.game_id})">
+                <button class="buy-button" onclick="addToCart(${gameId})">
                     <i class="fas fa-shopping-cart"></i> В корзину
                 </button>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 function searchGames() {
@@ -126,7 +147,7 @@ async function addToCart(gameId) {
     const user = localStorage.getItem('user');
     if (!user) {
         alert('Пожалуйста, войдите в систему чтобы добавить игру в корзину');
-        window.location.href = '/pages/Authorization.html';
+        window.location.href = '../AuthorizationRegistration/Authorization.html';
         return;
     }
 
@@ -140,16 +161,23 @@ async function addToCart(gameId) {
         const userData = JSON.parse(user);
         console.log(`Добавление в корзину: UserId=${userData.id}, GameId=${gameId}`);
         
+        const formData = new FormData();
+        formData.append('userId', userData.id);
+        formData.append('gameId', gameId);
+        formData.append('quantity', '1');
+
+        console.log('Отправка FormData...');
+
         const response = await fetch(`${CART_API_URL}/AddToCart`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `userId=${userData.id}&gameId=${gameId}&quantity=1`
+            body: formData
         });
+
+        console.log('Response status:', response.status);
 
         if (response.ok) {
             const result = await response.json();
+            console.log('Успешно добавлено в корзину:', result);
             alert('Игра успешно добавлена в корзину!');
             updateCartCounter(userData.id);
         } else if (response.status === 409) {
@@ -161,34 +189,18 @@ async function addToCart(gameId) {
         }
     } catch (error) {
         console.error('Ошибка сети:', error);
-        alert('Ошибка сети при добавлении в корзину');
+        alert('Ошибка сети при добавлении в корзину: ' + error.message);
     }
 }
 
 function updateCartBadge(count) {
-    let cartLink = document.querySelector('a[href="/pages/MyBug.html"]');
+    let cartLink = document.querySelector('a[href="../MyBug/MyBug.html"]');
     if (!cartLink) return;
     
     let oldBadge = cartLink.querySelector('.cart-badge');
     if (oldBadge) oldBadge.remove();
     
-    if (count > 0) {
-        let badge = document.createElement('span');
-        badge.className = 'cart-badge';
-        badge.textContent = count;
-        badge.style.cssText = `
-            background: #ff4444;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 12px;
-            margin-left: 5px;
-            display: inline-block;
-            min-width: 18px;
-            text-align: center;
-        `;
-        cartLink.appendChild(badge);
-    }
+  
 }
 
 async function updateCartCounter(userId) {
@@ -211,7 +223,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutButton');
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
-    document.getElementById('searchInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') searchGames();
-    }); 
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchGames();
+        });
+    }
 });

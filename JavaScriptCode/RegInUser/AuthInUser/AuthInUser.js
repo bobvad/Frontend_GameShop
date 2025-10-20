@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user.role === 'Admin') {
             window.location.href = '/pages/SecretAdmin/admin.html';
         } else {
-            window.location.href = '/pages/LichniiCabinet.html';
+            window.location.href = '../Cabinet/LichniiCabinet.html';
         }
         return;
     }
 
-    const API_URL = 'http://192.168.0.9:5000/api';
+     const API_URL = 'https://localhost:7083/api';
     document.getElementById('loginForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (user.role === 'Admin') {
                         window.location.href = '/pages/SecretAdmin/admin.html';
                     } else {
-                        window.location.href = '/pages/LichniiCabinet.html';
+                        window.location.href = '../Cabinet/LichniiCabinet.html';
                     }
                 }, 1000);
                 

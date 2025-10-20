@@ -1,5 +1,5 @@
-const CART_API_URL = 'http://192.168.0.9:5000/api/Carts';
-const PURCHASE_API_URL = 'http://192.168.0.9:5000/api/PurchasesController';
+const CART_API_URL = 'https://localhost:7083/api/Carts';
+const PURCHASE_API_URL = 'https://localhost:7083/api/PurchasesController';
 
 function checkAuth() {
     const user = localStorage.getItem('user');
@@ -95,11 +95,6 @@ function displayCartItems(cartItems) {
                         <div class="cart-item-total">Итого: ${((item.game?.price || 0) * (item.quantity || 1)).toFixed(2)} руб.</div>
                     </div>
                     <div class="cart-item-actions">
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus-btn" data-cart-id="${item.id}">-</button>
-                            <span class="quantity">${item.quantity || 1}</span>
-                            <button class="quantity-btn plus-btn" data-cart-id="${item.id}">+</button>
-                        </div>
                         <button class="remove-btn" data-cart-id="${item.id}">
                             <i class="fas fa-trash"></i>
                             Удалить
@@ -130,12 +125,11 @@ function displayCartItems(cartItems) {
         </div>
         
         <div style="text-align: center; margin-top: 20px;">
-            <a href="/pages/Catalog.html" class="continue-shopping">
+            <a href="../Catalog/Catalog.html" class="continue-shopping">
                 Продолжить покупки
             </a>
         </div>
     `;
-    
     
     attachCartEventListeners();
 }
@@ -197,12 +191,13 @@ async function checkout() {
         }
 
         for (const item of cartItems) {
+            const formData = new FormData();
+            formData.append('userId', user.id);
+            formData.append('gameId', item.gameId);
+
             await fetch(`${PURCHASE_API_URL}/BuyGame`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `userId=${user.id}&gameId=${item.gameId}`
+                body: formData
             });
         }
 
@@ -214,7 +209,7 @@ async function checkout() {
         loadCartFromServer(user.id);
         
         setTimeout(() => {
-            window.location.href = '/pages/LichniiCabinet.html';
+            window.location.href = '../Cabinet/LichniiCabinet.html';
         }, 1500);
 
     } catch (error) {
@@ -235,7 +230,7 @@ function showEmptyCart() {
             <i class="fas fa-shopping-cart"></i>
             <h3>Корзина пуста</h3>
             <p>Добавьте игры из каталога, чтобы они появились здесь</p>
-            <a href="/pages/Catalog.html" class="continue-shopping">
+            <a href="../Catalog/Catalog.html" class="continue-shopping">
                 <i class="fas fa-arrow-left"></i>
                 Перейти в каталог
             </a>
@@ -265,12 +260,13 @@ async function updateCartQuantity(cartId, change) {
             return;
         }
 
+        const formData = new FormData();
+        formData.append('cartId', cartId);
+        formData.append('quantity', newQuantity);
+
         const response = await fetch(`${CART_API_URL}/UpdateQuantity`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `cartId=${cartId}&quantity=${newQuantity}`
+            body: formData
         });
 
         if (response.ok) {
@@ -329,7 +325,7 @@ async function clearCart() {
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
-    window.location.href = '/index.html';
+    window.location.href = '../GlavnaiPage/index.html';
 }
 
 document.addEventListener('DOMContentLoaded', function() {

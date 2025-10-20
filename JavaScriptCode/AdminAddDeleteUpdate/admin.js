@@ -150,13 +150,11 @@ function editGame(gameId) {
         return;
     }
 
-    // Заполняем форму данными игры
     document.getElementById('editGameId').value = game.id;
     document.getElementById('editGameTitle').value = game.title || '';
     document.getElementById('editGameDescription').value = game.description || '';
     document.getElementById('editGamePrice').value = game.price || 0;
     
-    // Форматируем дату для input type="date"
     const releaseDate = new Date(game.releaseDate);
     const formattedDate = releaseDate.toISOString().split('T')[0];
     document.getElementById('editGameReleaseDate').value = formattedDate;
@@ -165,7 +163,6 @@ function editGame(gameId) {
     document.getElementById('editGamePublisher').value = game.publisher || '';
     document.getElementById('editGameAgeRating').value = game.ageRating || '';
 
-    // Показываем модальное окно
     document.getElementById('editGameModal').style.display = 'block';
 }
 
@@ -174,7 +171,6 @@ function closeEditModal() {
     document.getElementById('editGameMessage').innerHTML = '';
 }
 
-// Обработчик формы редактирования
 document.getElementById('editGameForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 

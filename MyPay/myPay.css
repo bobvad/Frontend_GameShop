@@ -1,7 +1,152 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --primary: #0063E6;
+    --primary-dark: #004BB8;
+    --primary-light: #4D8EFF;
+    --secondary: #FF9F00;
+    --dark: #1A2238;
+    --light: #F5F9FF;
+    --gray: #64748B;
+    --gray-light: #E2E8F0;
+    --success: #10B981;
+    --danger: #EF4444;
+}
+
+body {
+    background-color: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 15px rgba(0, 65, 196, 0.2);
+    position: static;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.logo i {
+    margin-right: 10px;
+    color: var(--secondary);
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+nav ul li a:hover, 
+nav ul li a.active {
+    color: var(--secondary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.guest-only, .auth-only {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-login {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    margin-right: 10px;
+}
+
+.btn-register {
+    background: var(--secondary);
+    color: white;
+}
+
+.btn-login:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-register:hover {
+    background: #e55a00;
+}
+
+.btn-logout {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
 
 .purchases-section {
     padding: 40px 0;
     min-height: 70vh;
+    flex: 1;
 }
 
 .section-title {
@@ -11,6 +156,7 @@
     color: var(--dark);
     position: relative;
     padding-bottom: 15px;
+    font-weight: 700;
 }
 
 .section-title::after {
@@ -20,25 +166,27 @@
     left: 50%;
     transform: translateX(-50%);
     width: 80px;
-    height: 3px;
-    background: var(--primary);
+    height: 4px;
+    background: var(--secondary);
+    border-radius: 2px;
 }
 
 .purchases-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 25px;
     margin-bottom: 40px;
 }
 
 .purchase-card {
     background: white;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
+    border: 1px solid var(--gray-light);
 }
 
 .purchase-card:hover {
@@ -49,17 +197,12 @@
 .purchase-image {
     height: 180px;
     overflow: hidden;
-}
-
-.purchase-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s;
-}
-
-.purchase-card:hover .purchase-image img {
-    transform: scale(1.05);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
 }
 
 .purchase-info {
@@ -70,25 +213,32 @@
 }
 
 .purchase-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
     color: var(--dark);
+    text-align: center;
 }
 
 .purchase-details {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 15px;
+    gap: 12px;
+    margin: 15px 0;
     flex-grow: 1;
 }
 
 .purchase-detail {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--gray);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.purchase-detail:last-child {
+    border-bottom: none;
 }
 
 .purchase-detail span:first-child {
@@ -97,85 +247,314 @@
 
 .purchase-detail span:last-child {
     color: var(--dark);
+    font-weight: 600;
 }
 
-.purchase-price {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin-top: 10px;
-}
-
-.purchase-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.btn-download, .btn-play {
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 500;
+.activation-key {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: var(--primary-dark);
+    background: var(--light);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--gray-light);
+    letter-spacing: 1px;
     font-size: 0.9rem;
-    transition: all 0.3s;
-    cursor: pointer;
-    border: none;
-    flex: 1;
-    text-align: center;
 }
 
-.btn-download {
-    background: var(--primary);
-    color: white;
+.key-status {
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
 }
 
-.btn-download:hover {
-    background: var(--primary-dark);
-}
-
-.btn-play {
+.key-status.active {
     background: var(--success);
     color: white;
 }
 
-.btn-play:hover {
-    background: #0DAF70;
+.key-status.used {
+    background: var(--gray);
+    color: white;
 }
+
+.key-status.revoked {
+    background: var(--danger);
+    color: white;
+}
+
+/* УДАЛЕНО: Стили для кнопок .btn-download и .btn-play */
 
 .loading-indicator {
     text-align: center;
-    padding: 30px;
+    padding: 40px 20px;
     color: var(--gray);
     font-size: 1.1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    margin: 20px 0;
+}
+
+.loading-indicator i {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+    display: block;
 }
 
 .empty-state {
     text-align: center;
-    padding: 60px 20px;
-    color: var(--gray);
+    background: white;
+    padding: 60px 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    margin: 20px 0;
 }
 
 .empty-state i {
-    font-size: 4rem;
+    font-size: 80px;
     color: var(--gray-light);
     margin-bottom: 20px;
 }
 
 .empty-state h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
+    font-size: 1.8rem;
     color: var(--dark);
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
 .empty-state p {
+    color: var(--gray);
     margin-bottom: 25px;
+    font-size: 1.1rem;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
 }
 
+.auth-required {
+    text-align: center;
+    padding: 50px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.auth-required i {
+    font-size: 60px;
+    color: var(--gray-light);
+    margin-bottom: 20px;
+}
+
+.auth-required h3 {
+    font-size: 1.5rem;
+    color: var(--dark);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.auth-required p {
+    color: var(--gray);
+    margin-bottom: 25px;
+    font-size: 1rem;
+}
+
+.auth-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.auth-buttons .btn-login {
+    background: var(--primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.8rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s;
+}
+
+.auth-buttons .btn-register {
+    background: var(--secondary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.8rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s;
+}
+
+.auth-buttons .btn-login:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.auth-buttons .btn-register:hover {
+    background: #e55a00;
+    transform: translateY(-1px);
+}
+
+.simple-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 99, 230, 0.3);
+}
+
+.simple-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 99, 230, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* FOOTER */
+footer {
+    background: var(--dark);
+    color: white;
+    padding: 30px 0 15px;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.footer-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.footer-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--secondary);
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+.footer-links a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--secondary);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* CHAT BUTTON */
+.chat-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.chat-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+}
+
+.chat-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+}
+
+.chat-link i {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 992px) {
+    .header-content {
+        gap: 15px;
+    }
+}
+
 @media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    nav ul {
+        margin-top: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    nav ul li {
+        margin: 5px 10px;
+    }
+    
+    .header-actions {
+        margin-top: 15px;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    
     .purchases-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 20px;
@@ -184,14 +563,70 @@
     .section-title {
         font-size: 2rem;
     }
+    
+    .auth-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .auth-buttons .btn-login,
+    .auth-buttons .btn-register {
+        width: 180px;
+        justify-content: center;
+    }
+    
+    footer {
+        padding: 20px 0 10px;
+    }
 }
 
 @media (max-width: 576px) {
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
     .purchases-grid {
         grid-template-columns: 1fr;
     }
     
-    .purchase-actions {
-        flex-direction: column;
+    .purchases-section {
+        padding: 30px 0;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+    
+    .empty-state {
+        padding: 40px 20px;
+    }
+    
+    .empty-state i {
+        font-size: 60px;
+    }
+    
+    .empty-state h3 {
+        font-size: 1.5rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .chat-button {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 15px;
+    }
+    
+    .chat-link span {
+        display: none;
+    }
+    
+    .chat-link i {
+        margin-right: 0;
+        font-size: 24px;
     }
 }

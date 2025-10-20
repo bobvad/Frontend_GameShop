@@ -1,4 +1,4 @@
-const API_URL = 'http://192.168.0.9:5000/api';
+const API_URL = 'https://localhost:7083/api';
 
 function checkAuth() {
     const user = localStorage.getItem('user');
@@ -6,7 +6,6 @@ function checkAuth() {
     const guestElements = document.querySelectorAll('.guest-only');
     
     if (user) {
-        // Пользователь авторизован
         authElements.forEach(el => el.style.display = 'block');
         guestElements.forEach(el => el.style.display = 'none');
         
@@ -21,7 +20,6 @@ function checkAuth() {
             console.error('Error parsing user data:', e);
         }
     } else {
-        // Пользователь не авторизован
         authElements.forEach(el => el.style.display = 'none');
         guestElements.forEach(el => el.style.display = 'block');
     }
@@ -65,11 +63,8 @@ function displayPurchases(purchases) {
     
     purchasesContainer.innerHTML = purchases.map(purchase => `
         <div class="purchase-card">
-            <div class="purchase-image">
-                <i class="fas fa-gamepad"></i>
-            </div>
             <div class="purchase-info">
-                <h3 class="purchase-title">${purchase.game?.title || 'Игра'}</h3>
+                <h3 class="purchase-title">${purchase.gameName || 'Игра'}</h3>
                 <div class="purchase-details">
                     <div class="purchase-detail">
                         <span>Дата покупки:</span>
@@ -79,14 +74,6 @@ function displayPurchases(purchases) {
                         <span>Ключ активации:</span>
                         <span>${purchase.activationKey || 'Не указан'}</span>
                     </div>
-                </div>
-                <div class="purchase-actions">
-                    <button class="btn-download" onclick="downloadGame(${purchase.gameId})">
-                        <i class="fas fa-download"></i> Скачать
-                    </button>
-                    <button class="btn-play" onclick="playGame(${purchase.gameId})">
-                        <i class="fas fa-play"></i> Играть
-                    </button>
                 </div>
             </div>
         </div>
@@ -101,15 +88,6 @@ function showEmptyState() {
     emptyState.style.display = 'block';
 }
 
-function getStatusText(status) {
-    const statusMap = {
-        'active': 'Активен',
-        'used': 'Использован',
-        'revoked': 'Отозван'
-    };
-    return statusMap[status] || status;
-}
-
 function downloadGame(gameId) {
     alert(`Начинается загрузка игры с ID: ${gameId}`);
 }
@@ -121,7 +99,7 @@ function playGame(gameId) {
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
-    window.location.href = '/index.html';
+    window.location.href = '../GlavnaiPage/index.html';
 }
 
 document.addEventListener('DOMContentLoaded', function() {

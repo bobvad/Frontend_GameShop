@@ -19,11 +19,6 @@
                 typingDiv.className = 'typing-indicator';
                 typingDiv.id = 'typingIndicator';
                 
-                for (let i = 0; i < 3; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'typing-dot';
-                    typingDiv.appendChild(dot);
-                }
                 
                 chatMessages.appendChild(typingDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;

@@ -14,17 +14,6 @@
                 <div class="logo">
                     <span>Games</span>
                 </div>
-                
-                <nav>
-                    <ul>
-                        <li><a href="/index.html" class="nav-link">Главная</a></li>
-                        <li><a href="/pages/Catalog.html" class="nav-link">Каталог игр</a></li>
-                        <li><a href="/pages/MyBug.html" class="nav-link">Моя корзина</a></li>
-                        <li><a href="/pages/MyPay/MyPay.html" class="nav-link">Мои покупки</a></li>
-                        <li><a href="/pages/LichniiCabinet.html" class="nav-link">Личный кабинет</a></li>
-                    </ul>
-                </nav>
-                
                 <div class="header-actions">
                    <div class="auth-only" style="display: none;">
                     <span id="userNameDisplay" style="color: white; margin-right: 15px;"></span>
@@ -32,9 +21,6 @@
                      <i class="fas fa-sign-out-alt"></i> Выйти
                      </button>
                 </div>
-               <button class="btn btn-exit" onclick="logoutToMain()">
-                <i class="fas fa-sign-out-alt"></i> Выйти
-               </button>
             </div>
         </div>
     </div>
@@ -48,9 +34,8 @@
     <nav class="admin-nav">
         <button class="nav-btn active" onclick="showSection('addGame')">Добавить игру</button>
         <button class="nav-btn" onclick="showSection('manageGames')">Управление играми</button>
-        <button class="nav-btn btn-exit" onclick="logoutToMain()">
-            <i class="fas fa-home"></i> На главную
-        </button>
+        <button class="nav-btn" onclick="showSection('manageGenres')">Управление жанрами</button>
+        <button class="nav-btn" onclick="showSection('manageGameGenres')">Связи игр и жанров</button>
     </nav>
 
     <div class="admin-container">
@@ -68,9 +53,12 @@
                     <textarea id="gameDescription" class="form-control" placeholder="Описание игры" required></textarea>
                 </div>
 
+                <!-- ИЗМЕНЕНО: цена без копеек -->
                 <div class="form-group">
                     <label for="gamePrice">Цена (руб.):</label>
-                    <input type="number" id="gamePrice" class="form-control" placeholder="0.00" step="0.01" required>
+                    <input type="number" id="gamePrice" class="form-control" placeholder="0" 
+                           min="0" step="1" title="Введите целое число" required>
+                    <small class="form-text">Только целые числа (без копеек)</small>
                 </div>
 
                 <div class="form-group">
@@ -102,6 +90,45 @@
             <div id="gamesList" class="games-grid">
             </div>
         </div>
+
+        <div id="manageGenres" class="section">
+            <h2>Управление жанрами</h2>
+            <div class="add-genre-section">
+                <h3>Добавить новый жанр</h3>
+                <div id="addGenreMessage"></div>
+                <form id="addGenreForm" class="inline-form">
+                    <input type="text" id="genreName" class="form-control" placeholder="Название жанра" required>
+                    <button type="submit" class="btn btn-success">Добавить жанр</button>
+                </form>
+            </div>
+            <div id="genresList" class="genres-grid">
+            </div>
+        </div>
+
+        <div id="manageGameGenres" class="section">
+            <h2>Связи игр и жанров</h2>
+            <div class="add-game-genre-section">
+                <h3>Добавить связь игры и жанра</h3>
+                <div id="addGameGenreMessage"></div>
+                <form id="addGameGenreForm" class="game-genre-form">
+                    <div class="form-group">
+                        <label for="gameSelect">Игра:</label>
+                        <select id="gameSelect" class="form-control" required>
+                            <option value="">Выберите игру</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="genreSelect">Жанр:</label>
+                        <select id="genreSelect" class="form-control" required>
+                            <option value="">Выберите жанр</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Добавить связь</button>
+                </form>
+            </div>
+            <div id="gameGenresList" class="game-genres-grid">
+            </div>
+        </div>
     </div>
 
     <div id="editGameModal" class="modal">
@@ -119,9 +146,12 @@
                     <label for="editGameDescription">Описание игры:</label>
                     <textarea id="editGameDescription" class="form-control" required></textarea>
                 </div>
+                <!-- ИЗМЕНЕНО: цена без копеек для редактирования -->
                 <div class="form-group">
                     <label for="editGamePrice">Цена (руб.):</label>
-                    <input type="number" id="editGamePrice" class="form-control" step="0.01" required>
+                    <input type="number" id="editGamePrice" class="form-control" 
+                           min="0" step="1" required>
+                    <small class="form-text">Только целые числа (без копеек)</small>
                 </div>
                 <div class="form-group">
                     <label for="editGameReleaseDate">Дата выхода:</label>
@@ -158,8 +188,8 @@
                 <div class="footer-section">
                     <h3>Категории</h3>
                     <ul class="footer-links">
-                        <li><a href="/pages/Catalog.html">Новинки</a></li>
-                        <li><a href="/pages/Catalog.html">Скоро выйдут</a></li>
+                        <li><a>Новинки</a></li>
+                        <li><a>Скоро выйдут</a></li>
                     </ul>
                 </div>
             </div>
@@ -170,6 +200,6 @@
         </div>
     </footer>
 
-    <script src="/js/AdminAddDeleteUpdate/admin.js"></script>
+    <script src="../JavaScriptCode/AdminAddDeleteUpdate/admin.js"></script>
 </body>
 </html>

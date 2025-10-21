@@ -1,7 +1,6 @@
-const API_URL = 'https://localhost:7083/api/GameController';
-const CART_API_URL = 'https://localhost:7083/api/Carts';
-const GAME_GENRE_API_URL = 'https://localhost:7083/api/GameGenreController';
-
+const API_URL = 'http://192.168.0.9:5000/api/GameController';
+const CART_API_URL = 'http://192.168.0.9:5000/api/Carts';
+const GAME_GENRE_API_URL = 'http://192.168.0.9:5000/api/GameGenreController';
 let allGames = [];
 
 function checkAuth() {

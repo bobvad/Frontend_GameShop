@@ -1,33 +1,66 @@
 const API_URL = 'http://192.168.0.9:5000/api';
 let currentUser = null;
 let allGames = [];
+let allGenres = [];
+let allGameGenres = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     checkAdminAuth();
     loadGames();
+    loadGenres();
+    loadGameGenres();
     setupHeader();
+    setupEventListeners();
 });
+
+function setupEventListeners() {
+    const addGameForm = document.getElementById('addGameForm');
+    if (addGameForm) {
+        addGameForm.addEventListener('submit', handleAddGame);
+    }
+
+    const editGameForm = document.getElementById('editGameForm');
+    if (editGameForm) {
+        editGameForm.addEventListener('submit', handleEditGame);
+    }
+
+    const addGenreForm = document.getElementById('addGenreForm');
+    if (addGenreForm) {
+        addGenreForm.addEventListener('submit', handleAddGenre);
+    }
+
+    const addGameGenreForm = document.getElementById('addGameGenreForm');
+    if (addGameGenreForm) {
+        addGameGenreForm.addEventListener('submit', handleAddGameGenre);
+    }
+}
 
 function setupHeader() {
     const userData = localStorage.getItem('user');
     if (userData) {
         const user = JSON.parse(userData);
-        document.querySelector('.auth-only').style.display = 'flex';
-        document.getElementById('userNameDisplay').textContent = user.name || user.email;
+        const authOnly = document.querySelector('.auth-only');
+        if (authOnly) {
+            authOnly.style.display = 'flex';
+        }
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        if (userNameDisplay) {
+            userNameDisplay.textContent = user.name || user.email;
+        }
     }
 }
 
 function checkAdminAuth() {
     const userData = localStorage.getItem('user');
     if (!userData) {
-        window.location.href = '/pages/Authorization.html';
+        window.location.href = '../AuthorizationRegistration/Authorization.html';
         return;
     }
 
     currentUser = JSON.parse(userData);
     if (currentUser.role !== 'Admin') {
         alert('Доступ запрещен! Требуются права администратора.');
-        window.location.href = '/index.html';
+        window.location.href = '../GlavnaiPage/index.html';
     }
 }
 
@@ -40,25 +73,69 @@ function showSection(sectionId) {
         btn.classList.remove('active');
     });
     
-    document.getElementById(sectionId).classList.add('active');
-    event.target.classList.add('active');
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
 
     if (sectionId === 'manageGames') {
         loadGames();
+    } else if (sectionId === 'manageGenres') {
+        loadGenres();
+    } else if (sectionId === 'manageGameGenres') {
+        loadGameGenres();
+        populateGameAndGenreSelects();
     }
 }
 
-document.getElementById('addGameForm').addEventListener('submit', async function(e) {
+async function handleAddGame(e) {
     e.preventDefault();
     
+    const title = document.getElementById('gameTitle').value.trim();
+    const description = document.getElementById('gameDescription').value.trim();
+    const priceInput = document.getElementById('gamePrice').value;
+    const releaseDateInput = document.getElementById('gameReleaseDate').value;
+    const developer = document.getElementById('gameDeveloper').value.trim();
+    const publisher = document.getElementById('gamePublisher').value.trim();
+    const ageRating = document.getElementById('gameAgeRating').value.trim();
+
+    if (!title || !description || !priceInput || !releaseDateInput || !developer || !publisher || !ageRating) {
+        showMessage('addGameMessage', 'Заполните все обязательные поля', 'error');
+        return;
+    }
+
+    const price = parseFloat(priceInput);
+    
+    if (isNaN(price) || price < 0) {
+        showMessage('addGameMessage', 'Введите корректную цену', 'error');
+        return;
+    }
+
+    const releaseDate = new Date(releaseDateInput).toISOString().split('T')[0];
+
+    const selectedDate = new Date(releaseDateInput);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+    
+    if (selectedDate > today) {
+        showMessage('addGameMessage', 'Дата выхода не может быть в будущем', 'error');
+        return;
+    }
+
     const gameData = new URLSearchParams();
-    gameData.append('title', document.getElementById('gameTitle').value);
-    gameData.append('description', document.getElementById('gameDescription').value);
-    gameData.append('price', document.getElementById('gamePrice').value);
-    gameData.append('releaseDate', document.getElementById('gameReleaseDate').value);
-    gameData.append('developer', document.getElementById('gameDeveloper').value);
-    gameData.append('publisher', document.getElementById('gamePublisher').value);
-    gameData.append('ageRating', document.getElementById('gameAgeRating').value);
+    gameData.append('title', title);
+    gameData.append('description', description);
+    gameData.append('price', price);
+    gameData.append('releaseDate', releaseDate); 
+    gameData.append('developer', developer);
+    gameData.append('publisher', publisher);
+    gameData.append('ageRating', ageRating);
+
+    console.log('Отправка данных:', Object.fromEntries(gameData));
 
     try {
         const response = await fetch(`${API_URL}/GameController/AddGame`, {
@@ -69,19 +146,32 @@ document.getElementById('addGameForm').addEventListener('submit', async function
             body: gameData
         });
 
+        const responseText = await response.text();
+        let result;
+        
+        try {
+            result = responseText ? JSON.parse(responseText) : {};
+        } catch {
+            result = { message: responseText };
+        }
+
         if (response.ok) {
-            const result = await response.json();
             showMessage('addGameMessage', 'Игра успешно добавлена!', 'success');
             document.getElementById('addGameForm').reset();
-            loadGames();
+            loadGames(); 
+        } else if (response.status === 409) {
+            showMessage('addGameMessage', result.message || 'Игра с таким названием уже существует', 'error');
+        } else if (response.status === 400) {
+            showMessage('addGameMessage', result.message || 'Ошибка валидации данных', 'error');
         } else {
-            showMessage('addGameMessage', 'Ошибка при добавлении игры', 'error');
+            console.error('Ошибка сервера:', response.status, result);
+            showMessage('addGameMessage', result.message || `Ошибка сервера: ${response.status}`, 'error');
         }
     } catch (error) {
-        console.error('Ошибка:', error);
-        showMessage('addGameMessage', 'Ошибка подключения к серверу', 'error');
+        console.error('Ошибка сети:', error);
+        showMessage('addGameMessage', 'Ошибка подключения к серверу: ' + error.message, 'error');
     }
-});
+}
 
 async function loadGames() {
     try {
@@ -89,15 +179,18 @@ async function loadGames() {
         if (response.ok) {
             allGames = await response.json();
             displayGames(allGames);
+        } else {
+            showMessage('addGameMessage', 'Ошибка загрузки списка игр', 'error');
         }
     } catch (error) {
         console.error('Ошибка загрузки игр:', error);
-        showMessage('addGameMessage', 'Ошибка загрузки списка игр', 'error');
+        showMessage('addGameMessage', 'Ошибка подключения к серверу при загрузке игр', 'error');
     }
 }
 
 function displayGames(games) {
     const gamesList = document.getElementById('gamesList');
+    if (!gamesList) return;
     
     if (!games || games.length === 0) {
         gamesList.innerHTML = '<p style="text-align: center; color: #bdc3c7; grid-column: 1 / -1;">Игры не найдены</p>';
@@ -106,12 +199,12 @@ function displayGames(games) {
 
     gamesList.innerHTML = games.map(game => `
         <div class="game-card">
-            <div class="game-title">${game.title || 'Без названия'}</div>
-            <div class="game-info">Разработчик: ${game.developer || 'Не указан'}</div>
-            <div class="game-info">Издатель: ${game.publisher || 'Не указан'}</div>
-            <div class="game-info">Рейтинг: ${game.ageRating || 'Не указан'}</div>
+            <div class="game-title">${escapeHtml(game.title || 'Без названия')}</div>
+            <div class="game-info">Разработчик: ${escapeHtml(game.developer || 'Не указан')}</div>
+            <div class="game-info">Издатель: ${escapeHtml(game.publisher || 'Не указан')}</div>
+            <div class="game-info">Рейтинг: ${escapeHtml(game.ageRating || 'Не указан')}</div>
             <div class="game-info">Цена: ₽${game.price || '0'}</div>
-            <div class="game-info">Дата выхода: ${new Date(game.releaseDate).toLocaleDateString()}</div>
+            <div class="game-info">Дата выхода: ${game.releaseDate ? new Date(game.releaseDate).toLocaleDateString() : 'Не указана'}</div>
             <div class="game-actions">
                 <button class="btn btn-sm btn-danger" onclick="deleteGame(${game.id})">Удалить</button>
                 <button class="btn btn-sm btn-warning" onclick="editGame(${game.id})">Редактировать</button>
@@ -133,6 +226,7 @@ async function deleteGame(gameId) {
         if (response.ok) {
             showMessage('addGameMessage', 'Игра успешно удалена!', 'success');
             loadGames();
+            loadGameGenres();
         } else {
             const error = await response.text();
             showMessage('addGameMessage', 'Ошибка при удалении игры: ' + error, 'error');
@@ -155,9 +249,12 @@ function editGame(gameId) {
     document.getElementById('editGameDescription').value = game.description || '';
     document.getElementById('editGamePrice').value = game.price || 0;
     
-    const releaseDate = new Date(game.releaseDate);
-    const formattedDate = releaseDate.toISOString().split('T')[0];
-    document.getElementById('editGameReleaseDate').value = formattedDate;
+    let releaseDate = '';
+    if (game.releaseDate) {
+        const date = new Date(game.releaseDate);
+        releaseDate = date.toISOString().split('T')[0];
+    }
+    document.getElementById('editGameReleaseDate').value = releaseDate;
     
     document.getElementById('editGameDeveloper').value = game.developer || '';
     document.getElementById('editGamePublisher').value = game.publisher || '';
@@ -171,19 +268,28 @@ function closeEditModal() {
     document.getElementById('editGameMessage').innerHTML = '';
 }
 
-document.getElementById('editGameForm').addEventListener('submit', async function(e) {
+async function handleEditGame(e) {
     e.preventDefault();
 
     const gameId = document.getElementById('editGameId').value;
+    const priceInput = document.getElementById('editGamePrice').value;
+    
+    const price = parseFloat(priceInput);
+    
+    if (isNaN(price) || price < 0) {
+        showMessage('editGameMessage', 'Введите корректную цену', 'error');
+        return;
+    }
+
     const gameData = new URLSearchParams();
-    gameData.append('id', gameId);
-    gameData.append('title', document.getElementById('editGameTitle').value);
-    gameData.append('description', document.getElementById('editGameDescription').value);
-    gameData.append('price', document.getElementById('editGamePrice').value);
-    gameData.append('releaseDate', document.getElementById('editGameReleaseDate').value);
-    gameData.append('developer', document.getElementById('editGameDeveloper').value);
-    gameData.append('publisher', document.getElementById('editGamePublisher').value);
-    gameData.append('ageRating', document.getElementById('editGameAgeRating').value);
+    gameData.append('Id', gameId);
+    gameData.append('Title', document.getElementById('editGameTitle').value);
+    gameData.append('Description', document.getElementById('editGameDescription').value);
+    gameData.append('Price', price); 
+    gameData.append('ReleaseDate', document.getElementById('editGameReleaseDate').value);
+    gameData.append('Developer', document.getElementById('editGameDeveloper').value);
+    gameData.append('Publisher', document.getElementById('editGamePublisher').value);
+    gameData.append('AgeRating', document.getElementById('editGameAgeRating').value);
 
     try {
         const response = await fetch(`${API_URL}/GameController/UpdateGame`, {
@@ -195,7 +301,6 @@ document.getElementById('editGameForm').addEventListener('submit', async functio
         });
 
         if (response.ok) {
-            const result = await response.json();
             showMessage('editGameMessage', 'Игра успешно обновлена!', 'success');
             
             setTimeout(() => {
@@ -210,29 +315,261 @@ document.getElementById('editGameForm').addEventListener('submit', async functio
         console.error('Ошибка:', error);
         showMessage('editGameMessage', 'Ошибка подключения к серверу', 'error');
     }
-});
+}
 
-window.onclick = function(event) {
-    const modal = document.getElementById('editGameModal');
-    if (event.target === modal) {
-        closeEditModal();
+async function loadGenres() {
+    try {
+        const response = await fetch(`${API_URL}/GenresController/GetAll`);
+        if (response.ok) {
+            allGenres = await response.json();
+            displayGenres(allGenres);
+        } else {
+            showMessage('addGenreMessage', 'Ошибка загрузки списка жанров', 'error');
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки жанров:', error);
+        showMessage('addGenreMessage', 'Ошибка подключения к серверу при загрузке жанров', 'error');
     }
 }
 
-function logout() {
-    localStorage.removeItem('user');
-    window.location.href = '/pages/Authorization.html';
+function displayGenres(genres) {
+    const genresList = document.getElementById('genresList');
+    if (!genresList) return;
+    
+    if (!genres || genres.length === 0) {
+        genresList.innerHTML = '<p style="text-align: center; color: #bdc3c7;">Жанры не найдены</p>';
+        return;
+    }
+
+    genresList.innerHTML = genres.map(genre => `
+        <div class="genre-card">
+            <div class="genre-name">${escapeHtml(genre.genreName || 'Без названия')}</div>
+            <div class="genre-actions">
+                <button class="btn btn-sm btn-danger" onclick="deleteGenre(${genre.id})">Удалить</button>
+            </div>
+        </div>
+    `).join('');
 }
 
-function logoutToMain() {
-    window.location.href = '/index.html';
+async function handleAddGenre(e) {
+    e.preventDefault();
+    
+    const genreName = document.getElementById('genreName').value;
+    if (!genreName) {
+        showMessage('addGenreMessage', 'Введите название жанра', 'error');
+        return;
+    }
+
+    const genreData = new URLSearchParams();
+    genreData.append('genreName', genreName);
+
+    try {
+        const response = await fetch(`${API_URL}/GenresController/Add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: genreData
+        });
+
+        if (response.ok) {
+            showMessage('addGenreMessage', 'Жанр успешно добавлен!', 'success');
+            document.getElementById('addGenreForm').reset();
+            loadGenres();
+            populateGameAndGenreSelects();
+        } else {
+            const errorText = await response.text();
+            showMessage('addGenreMessage', `Ошибка при добавлении жанра: ${errorText}`, 'error');
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+        showMessage('addGenreMessage', 'Ошибка подключения к серверу', 'error');
+    }
+}
+
+async function deleteGenre(genreId) {
+    if (!confirm('Вы уверены, что хотите удалить этот жанр?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/GenresController/Delete`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `id=${genreId}`
+        });
+
+        if (response.ok) {
+            showMessage('addGenreMessage', 'Жанр успешно удален!', 'success');
+            loadGenres();
+            loadGameGenres();
+            populateGameAndGenreSelects();
+        } else {
+            const error = await response.text();
+            showMessage('addGenreMessage', 'Ошибка при удалении жанра: ' + error, 'error');
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+        showMessage('addGenreMessage', 'Ошибка подключения к серверу', 'error');
+    }
+}
+
+async function loadGameGenres() {
+    try {
+        const response = await fetch(`${API_URL}/GameGenreController/GetAllGamesWithGenres`);
+        if (response.ok) {
+            allGameGenres = await response.json();
+            displayGameGenres(allGameGenres);
+        } else {
+            showMessage('addGameGenreMessage', 'Ошибка загрузки связей игр и жанров', 'error');
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки связей:', error);
+        showMessage('addGameGenreMessage', 'Ошибка подключения к серверу при загрузке связей', 'error');
+    }
+}
+
+function displayGameGenres(gameGenres) {
+    const gameGenresList = document.getElementById('gameGenresList');
+    if (!gameGenresList) return;
+    
+    if (!gameGenres || gameGenres.length === 0) {
+        gameGenresList.innerHTML = '<p style="text-align: center; color: #bdc3c7;">Связи не найдены</p>';
+        return;
+    }
+
+    gameGenresList.innerHTML = gameGenres.map(game => `
+        <div class="game-genre-card">
+            <div class="game-title">${escapeHtml(game.title || 'Без названия')}</div>
+            <div class="game-genres">
+                <strong>Жанры:</strong> 
+                ${game.genres && game.genres.length > 0 
+                    ? game.genres.map(genre => `<span class="genre-tag">${escapeHtml(genre)}</span>`).join('')
+                    : '<span style="color: #bdc3c7;">Не назначены</span>'
+                }
+            </div>
+            <div class="game-genre-actions">
+                <button class="btn btn-sm btn-danger" onclick="deleteGameGenres(${game.id})">Удалить все связи</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function populateGameAndGenreSelects() {
+    const gameSelect = document.getElementById('gameSelect');
+    const genreSelect = document.getElementById('genreSelect');
+    
+    if (gameSelect) {
+        gameSelect.innerHTML = '<option value="">Выберите игру</option>' +
+            allGames.map(game => `<option value="${game.id}">${escapeHtml(game.title)}</option>`).join('');
+    }
+    
+    if (genreSelect) {
+        genreSelect.innerHTML = '<option value="">Выберите жанр</option>' +
+            allGenres.map(genre => `<option value="${genre.id}">${escapeHtml(genre.genreName)}</option>`).join('');
+    }
+}
+
+async function handleAddGameGenre(e) {
+    e.preventDefault();
+    
+    const gameId = document.getElementById('gameSelect').value;
+    const genreId = document.getElementById('genreSelect').value;
+
+    if (!gameId || !genreId) {
+        showMessage('addGameGenreMessage', 'Выберите игру и жанр', 'error');
+        return;
+    }
+
+    const gameGenreData = new URLSearchParams();
+    gameGenreData.append('gameId', gameId);
+    gameGenreData.append('genreId', genreId);
+
+    try {
+        const response = await fetch(`${API_URL}/GameGenreController/AddGameGenre`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: gameGenreData
+        });
+
+        if (response.ok) {
+            showMessage('addGameGenreMessage', 'Связь успешно добавлена!', 'success');
+            document.getElementById('addGameGenreForm').reset();
+            loadGameGenres();
+        } else if (response.status === 400) {
+            showMessage('addGameGenreMessage', 'Такая связь уже существует', 'error');
+        } else {
+            const errorText = await response.text();
+            showMessage('addGameGenreMessage', `Ошибка при добавлении связи: ${errorText}`, 'error');
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+        showMessage('addGameGenreMessage', 'Ошибка подключения к серверу', 'error');
+    }
+}
+
+async function deleteGameGenres(gameId) {
+    if (!confirm('Вы уверены, что хотите удалить все связи этой игры с жанрами?')) {
+        return;
+    }
+
+    try {
+        const game = allGameGenres.find(g => g.id === gameId);
+        if (game && game.genres && game.genres.length > 0) {
+            for (const genreName of game.genres) {
+                const genre = allGenres.find(g => g.genreName === genreName);
+                if (genre) {
+                    await fetch(`${API_URL}/GameGenreController/DeleteByGameAndGenre`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `gameId=${gameId}&genreId=${genre.id}`
+                    });
+                }
+            }
+            showMessage('addGameGenreMessage', 'Все связи игры удалены!', 'success');
+            loadGameGenres();
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+        showMessage('addGameGenreMessage', 'Ошибка при удалении связей', 'error');
+    }
+}
+
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 function showMessage(containerId, message, type) {
     const container = document.getElementById(containerId);
-    container.innerHTML = `<div class="message ${type}">${message}</div>`;
+    if (container) {
+        container.innerHTML = `<div class="message ${type}">${message}</div>`;
+        
+        setTimeout(() => {
+            container.innerHTML = '';
+        }, 5000);
+    }
+}
+
+function logoutToMain() {
+    window.location.href = '../GlavnaiPage/index.html';
+}
+
+window.onclick = function(event) {
+    const gameModal = document.getElementById('editGameModal');
     
-    setTimeout(() => {
-        container.innerHTML = '';
-    }, 5000);
+    if (event.target === gameModal) {
+        closeEditModal();
+    }
 }

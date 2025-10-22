@@ -29,7 +29,7 @@ function checkAuth() {
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
-    window.location.href = '../GlavnaiPage/index.html'; 
+    window.location.href = '/GlavnaiPage/index.html'; 
 }
 
 async function loadGamesData() {
@@ -177,7 +177,7 @@ async function addToCart(gameId) {
     const user = localStorage.getItem('user');
     if (!user) {
         alert('Пожалуйста, войдите в систему чтобы добавить игру в корзину');
-        window.location.href = '../AuthorizationRegistration/Authorization.html';
+        window.location.href = '/AuthorizationRegistration/Authorization.html';
         return;
     }
 
@@ -224,7 +224,7 @@ async function addToCart(gameId) {
 }
 
 function updateCartBadge(count) {
-    let cartLink = document.querySelector('a[href="../MyBug/MyBug.html"]');
+    let cartLink = document.querySelector('a[href="/MyBug/MyBug.html"]');
     if (!cartLink) return;
     
     let oldBadge = cartLink.querySelector('.cart-badge');

@@ -35,7 +35,7 @@ function logout() {
     localStorage.removeItem('cart');
     localStorage.removeItem('purchasedGames');
     checkAuth();
-    window.location.href = '../AuthorizationRegistration/Authorization.html';
+    window.location.href = '/AuthorizationRegistration/Authorization.html';
 }
 
 async function loadUserData() {
@@ -107,7 +107,7 @@ function displayRecentPurchases(purchases) {
     if (!purchases || purchases.length === 0) {
         container.innerHTML = `
             <p style="color: var(--gray); text-align: center; padding: 20px;">
-                У вас пока нет совершенных покупок. <a href="/pages/Catalog.html" style="color: var(--primary);">Перейти в каталог</a>
+                У вас пока нет совершенных покупок. <a href="/Catalog.html" style="color: var(--primary);">Перейти в каталог</a>
             </p>
         `;
         return;
@@ -127,7 +127,7 @@ function displayRecentPurchases(purchases) {
         </div>
         ${purchases.length > 3 ? `
             <div style="text-align: center; margin-top: 15px;">
-                <a href="/pages/MyPay/MyPurchases.html" style="color: var(--primary);">Показать все покупки (${purchases.length})</a>
+                <a href="/MyPay/MyPay.html" style="color: var(--primary);">Показать все покупки (${purchases.length})</a>
             </div>
         ` : ''}
     `;
@@ -163,7 +163,7 @@ function displayCartItems(cartItems) {
             `).join('')}
         </div>
         <div style="text-align: center; margin-top: 20px;">
-            <a href="/pages/MyBug.html" class="btn-view-cart">Перейти в корзину (${cartItems.length})</a>
+            <a href="//MyBug.html" class="btn-view-cart">Перейти в корзину (${cartItems.length})</a>
         </div>
     `;
 }

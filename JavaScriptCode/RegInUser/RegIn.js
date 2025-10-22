@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('user', JSON.stringify(user));
                 
                 setTimeout(() => {
-                    window.location.href = '../Cabinet/LichniiCabinet.html';
+                    window.location.href = '/Cabinet/LichniiCabinet.html';
                 }, 2000);
                 
             } else if (response.status === 409) {

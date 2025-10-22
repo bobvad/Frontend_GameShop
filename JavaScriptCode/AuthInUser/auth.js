@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (userData) {
         const user = JSON.parse(userData);
         if (user.role === 'Admin') {
-            window.location.href = '../SecretAdmin/adminuprav.html';
+            window.location.href = '/SecretAdmin/adminuprav.html';
         } else {
-            window.location.href = '../Cabinet/LichniiCabinet.html';
+            window.location.href = '/Cabinet/LichniiCabinet.html';
         }
         return;
     }
@@ -46,9 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 setTimeout(() => {
                     if (user.role === 'Admin') {
-                        window.location.href = '../SecretAdmin/adminuprav.html';
+                        window.location.href = '/SecretAdmin/adminuprav.html';
                     } else {
-                        window.location.href = '../Cabinet/LichniiCabinet.html';
+                        window.location.href = '/Cabinet/LichniiCabinet.html';
                     }
                 }, 1000);
                 

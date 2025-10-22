@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель администратора - Game Store</title>
-    <link rel="stylesheet" href="../SecretAdmin/admin.css">
+    <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -53,7 +53,6 @@
                     <textarea id="gameDescription" class="form-control" placeholder="Описание игры" required></textarea>
                 </div>
 
-                <!-- ИЗМЕНЕНО: цена без копеек -->
                 <div class="form-group">
                     <label for="gamePrice">Цена (руб.):</label>
                     <input type="number" id="gamePrice" class="form-control" placeholder="0" 
@@ -146,7 +145,7 @@
                     <label for="editGameDescription">Описание игры:</label>
                     <textarea id="editGameDescription" class="form-control" required></textarea>
                 </div>
-                <!-- ИЗМЕНЕНО: цена без копеек для редактирования -->
+              
                 <div class="form-group">
                     <label for="editGamePrice">Цена (руб.):</label>
                     <input type="number" id="editGamePrice" class="form-control" 
@@ -200,6 +199,6 @@
         </div>
     </footer>
 
-    <script src="../JavaScriptCode/AdminAddDeleteUpdate/admin.js"></script>
+    <script src="/JavaScriptCode/AdminAddDeleteUpdate/admin.js"></script>
 </body>
 </html>

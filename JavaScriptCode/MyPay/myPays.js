@@ -99,7 +99,7 @@ function playGame(gameId) {
 function logout() {
     localStorage.removeItem('user');
     checkAuth();
-    window.location.href = '../GlavnaiPage/index.html';
+    window.location.href = '/GlavnaiPage/index.html';
 }
 
 document.addEventListener('DOMContentLoaded', function() {

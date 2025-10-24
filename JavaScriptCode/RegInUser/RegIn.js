@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const API_URL = 'http://192.168.0.8:5000/api';
+    const API_URL = 'http://94.51.193.181:50000/api';
 
     document.getElementById('registerForm').addEventListener('submit', async function(event) {
         event.preventDefault();

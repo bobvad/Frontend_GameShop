@@ -1,4 +1,4 @@
-const API_URL = 'http://192.168.0.9:5000/api';
+const API_URL = 'http://192.168.0.8:5000/api';
 let currentUser = null;
 let allGames = [];
 let allGenres = [];

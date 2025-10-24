@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    const API_URL = 'http://192.168.0.9:5000/api';
+    const API_URL = 'http://192.168.0.8:5000/api';
     document.getElementById('loginForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 

@@ -1,5 +1,5 @@
-const CART_API_URL = 'http://192.168.0.9:5000/api/Carts';
-const PURCHASE_API_URL = 'http://192.168.0.9:5000/api/PurchasesController';
+const CART_API_URL = 'http://192.168.0.8:5000/api/Carts';
+const PURCHASE_API_URL = 'http://192.168.0.8:5000/api/PurchasesController';
 
 function checkAuth() {
     const user = localStorage.getItem('user');
